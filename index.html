@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ops Link - Discord Bot</title>
     <link rel="icon" type="image/png" href="https://cdn.discordapp.com/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png">
+    <link rel="shortcut icon" type="image/png" href="https://cdn.discordapp.com/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -36,10 +38,17 @@
         /* Falling Game Logos */
         .falling-logo {
             position: absolute;
-            font-size: 40px;
-            opacity: 0.3;
+            width: 60px;
+            height: 60px;
+            opacity: 0.4;
             animation: fall linear infinite;
-            filter: drop-shadow(0 0 10px currentColor);
+            filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.8));
+        }
+        
+        .falling-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         @keyframes fall {
@@ -53,18 +62,20 @@
             }
         }
 
-        header {
-            background: rgba(26, 26, 46, 0.9);
+        /* Navigation */
+        nav {
+            background: rgba(26, 26, 46, 0.95);
             backdrop-filter: blur(20px);
-            padding: 1.5rem 0;
+            padding: 1rem 0;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .header-content {
+        .nav-content {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 2rem;
@@ -73,12 +84,18 @@
             align-items: center;
         }
 
-        .logo {
+        .nav-logo {
             display: flex;
             align-items: center;
             gap: 1rem;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 800;
+        }
+
+        .nav-logo img {
+            height: 45px;
+            width: 45px;
+            object-fit: contain;
         }
 
         .logo-text {
@@ -88,28 +105,29 @@
             background-clip: text;
         }
 
-        .api-badge {
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
+        .nav-links {
             display: flex;
-            flex-direction: column;
-            gap: 0.3rem;
+            gap: 2.5rem;
+            list-style: none;
         }
 
-        .api-label {
-            font-size: 0.7rem;
+        .nav-links a {
             color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
         }
 
-        .api-url {
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
+        .nav-links a:hover {
+            color: #fff;
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .nav-links a.active {
             color: #8b5cf6;
-            font-weight: 600;
         }
 
         .container {
@@ -117,15 +135,35 @@
             z-index: 1;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 120px 2rem 4rem;
+            padding: 100px 2rem 4rem;
         }
 
+        /* Section Styling */
+        section {
+            min-height: 100vh;
+            padding: 4rem 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, #fff, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Hero Section */
         .hero {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 6rem;
             align-items: center;
-            margin-bottom: 6rem;
         }
 
         .hero-content h1 {
@@ -175,6 +213,8 @@
             cursor: pointer;
             transition: all 0.3s;
             border: none;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .btn-primary {
@@ -228,16 +268,25 @@
             border-radius: 80px;
         }
 
+        .logo-card img {
+            position: relative;
+            z-index: 2;
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(-2deg); }
             50% { transform: translateY(-20px) rotate(2deg); }
         }
 
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 2rem;
-            margin-bottom: 6rem;
+            margin-top: 3rem;
         }
 
         .stat-card {
@@ -273,20 +322,7 @@
             font-weight: 600;
         }
 
-        .section {
-            margin-bottom: 6rem;
-        }
-
-        .section-title {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 3rem;
-            background: linear-gradient(135deg, #fff, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
+        /* Features Grid */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -350,6 +386,59 @@
             font-size: 1.3rem;
         }
 
+        /* Commands Grid */
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .command-category {
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 25px;
+            padding: 2.5rem;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #8b5cf6;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .command-item {
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            border-radius: 15px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .command-item:hover {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: #8b5cf6;
+            transform: translateX(10px);
+        }
+
+        .command-name {
+            font-family: 'Courier New', monospace;
+            color: #ec4899;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        .command-desc {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        /* Status Section */
         .status-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -425,57 +514,17 @@
             font-weight: 600;
         }
 
-        .commands-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        .command-category {
-            background: rgba(139, 92, 246, 0.05);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 25px;
-            padding: 2.5rem;
-        }
-
-        .category-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #8b5cf6;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .command-item {
-            background: rgba(139, 92, 246, 0.05);
-            border: 1px solid rgba(139, 92, 246, 0.1);
+        .api-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
             border-radius: 15px;
-            padding: 1.2rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: #fbbf24;
+            text-align: center;
         }
 
-        .command-item:hover {
-            background: rgba(139, 92, 246, 0.1);
-            border-color: #8b5cf6;
-            transform: translateX(10px);
-        }
-
-        .command-name {
-            font-family: 'Courier New', monospace;
-            color: #ec4899;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            font-size: 1.05rem;
-        }
-
-        .command-desc {
-            color: #94a3b8;
-            font-size: 0.95rem;
-        }
-
+        /* Footer */
         footer {
             background: rgba(26, 26, 46, 0.9);
             padding: 3rem 2rem;
@@ -489,22 +538,7 @@
             margin-bottom: 0.5rem;
         }
 
-        .loading {
-            text-align: center;
-            padding: 4rem;
-            color: #8b5cf6;
-            font-size: 1.2rem;
-        }
-
-        .api-warning {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            color: #fbbf24;
-        }
-
+        /* Responsive */
         @media (max-width: 1024px) {
             .hero {
                 grid-template-columns: 1fr;
@@ -524,23 +558,23 @@
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .status-grid,
-            .commands-grid {
+            .features-grid,
+            .commands-grid,
+            .status-grid {
                 grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 640px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
+            .nav-links {
+                display: none;
             }
 
             .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
                 font-size: 2.5rem;
             }
 
@@ -551,78 +585,79 @@
             .hero-buttons {
                 flex-direction: column;
             }
-
-            .api-badge {
-                width: 100%;
-            }
         }
     </style>
 </head>
 <body>
     <div class="bg-animation" id="bgAnimation"></div>
 
-    <header>
-        <div class="header-content">
-            <div class="logo">
-                <img src="https://cdn.discordapp.com/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png?ex=6913e114&is=69128f94&hm=feddacd1c3a1d7c37a3b3c797d860374e50c805e8ca279e68e1072046b9a0d04&" alt="Ops Link" style="height: 40px; margin-right: 10px;">
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="nav-logo">
+                <img src="https://cdn.discordapp.com/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png" alt="Ops Link">
                 <span class="logo-text">Ops Link</span>
             </div>
-            <div class="api-badge">
-                <span class="api-label">API Status</span>
-                <span class="api-url" id="apiStatus">Checking...</span>
-            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#commands">Commands</a></li>
+                <li><a href="#status">Status</a></li>
+            </ul>
         </div>
-    </header>
+    </nav>
 
     <div class="container">
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Ops Link</h1>
-                <p>Advanced Discord bot for tracking game statistics directly from source. Real-time stats for Roblox, Fortnite, Call of Duty, and PUBG with TXAdmin server management.</p>
-                
-                <div class="feature-tags">
-                    <span class="tag">🎮 Multi-Game Stats</span>
-                    <span class="tag">🖥️ TXAdmin Integration</span>
-                    <span class="tag">⚡ Direct API Scraping</span>
-                    <span class="tag">🔗 Account Linking</span>
+        <!-- Home Section -->
+        <section id="home">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Ops Link</h1>
+                    <p>Advanced Discord bot for tracking game statistics directly from source. Real-time stats for Roblox, Fortnite, Call of Duty, PUBG, and Battlefield with TXAdmin server management.</p>
+                    
+                    <div class="feature-tags">
+                        <span class="tag">🎮 Multi-Game Stats</span>
+                        <span class="tag">🖥️ TXAdmin Integration</span>
+                        <span class="tag">⚡ Direct API Scraping</span>
+                        <span class="tag">🔗 Account Linking</span>
+                    </div>
+
+                    <div class="hero-buttons">
+                        <a href="#status" class="btn btn-primary">View Status</a>
+                        <a href="#commands" class="btn btn-secondary">Commands</a>
+                    </div>
                 </div>
 
-                <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="document.getElementById('status').scrollIntoView({behavior: 'smooth'})">View Status</button>
-                    <button class="btn btn-secondary" onclick="document.getElementById('commands').scrollIntoView({behavior: 'smooth'})">Commands</button>
+                <div class="logo-showcase">
+                    <div class="logo-card">
+                        <img src="https://cdn.discordapp.com/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png" alt="Ops Link">
+                    </div>
                 </div>
             </div>
 
-            <div class="logo-showcase">
-                <div class="logo-card">
-                    <img src="https://cdn.discordapp.com/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png?ex=6913e114&is=69128f94&hm=feddacd1c3a1d7c37a3b3c797d860374e50c805e8ca279e68e1072046b9a0d04&" alt="Ops Link" style="width: 70%; height: 70%; object-fit: contain;">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Commands</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalLinks">--</div>
+                    <div class="stat-label">Linked Accounts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="uptime">--</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Platforms</div>
                 </div>
             </div>
         </section>
 
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">15+</div>
-                <div class="stat-label">Commands</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalLinks">--</div>
-                <div class="stat-label">Linked Accounts</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="uptime">--</div>
-                <div class="stat-label">Uptime</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">5</div>
-                <div class="stat-label">Platforms</div>
-            </div>
-        </div>
-
-        <!-- Features -->
-        <section class="section">
+        <!-- Features Section -->
+        <section id="features">
             <h2 class="section-title">Features</h2>
             <div class="features-grid">
                 <div class="feature-card">
@@ -700,17 +735,8 @@
             </div>
         </section>
 
-        <!-- Status -->
-        <section class="section" id="status">
-            <h2 class="section-title">Live Status</h2>
-            <div class="api-warning" id="mixedContentWarning" style="display: none;">
-                ⚠️ <strong>Note:</strong> Live status may not load due to browser security (Mixed Content). The bot is running, but HTTPS sites can't fetch from HTTP APIs. Static info is shown below.
-            </div>
-            <div id="statusContainer" class="loading">Connecting to bot API...</div>
-        </section>
-
-        <!-- Commands -->
-        <section class="section" id="commands">
+        <!-- Commands Section -->
+        <section id="commands">
             <h2 class="section-title">Commands</h2>
             <div class="commands-grid">
                 <div class="command-category">
@@ -758,6 +784,57 @@
                 </div>
             </div>
         </section>
+
+        <!-- Status Section -->
+        <section id="status">
+            <h2 class="section-title">Live Status</h2>
+            <div class="api-warning">
+                ⚠️ <strong>Note:</strong> Live API stats are unavailable due to browser security (HTTPS cannot fetch HTTP APIs). Static information shown below.
+            </div>
+            <div class="status-grid">
+                <div class="status-card">
+                    <div class="status-header">
+                        <h3>Bot Information</h3>
+                        <div class="status-indicator status-online"></div>
+                    </div>
+                    <div class="status-info">
+                        <div class="status-row">
+                            <span class="status-label">Database</span>
+                            <span class="status-value">JSON Storage</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Caching</span>
+                            <span class="status-value">5 min TTL</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <div class="status-header">
+                        <h3>TXAdmin</h3>
+                        <div class="status-indicator status-online"></div>
+                    </div>
+                    <div class="status-info">
+                        <div class="status-row">
+                            <span class="status-label">Server Control</span>
+                            <span class="status-value">✓ Supported</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Player Management</span>
+                            <span class="status-value">✓ Kick/Ban</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Status Monitor</span>
+                            <span class="status-value">✓ Real-time</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Platform</span>
+                            <span class="status-value">FiveM/GTA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <footer>
@@ -767,297 +844,170 @@
     </footer>
 
     <script>
-        // Your bot API URL
-        const API_URL = 'http://193.31.31.121:25908/api';
-
-        // Game logos for falling animation
+        // Real game logo URLs
         const gameLogos = [
-            '🎮', '🔫', '🪂', '⚔️', '🎯', '🏆', '💥', '🎪'
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437711939689119785/Fortnite-Logo-PNG-Image-Transparent.png?ex=69143d15&is=6912eb95&hm=a2df0cdeb393f5acb269101a8589a1a1bb23088b66fdfd471042aeb7789c5766&', // Fortnite
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437710905025757225/d9gfn65-39ecb111-e20e-4d48-8b00-825d40f19698.png?ex=69143c1f&is=6912ea9f&hm=b6d31fd99ee6951d353d183c437ad8006c3168cbf756f8089fed3473f5cb687f&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437710938135597097/6c14d39dae6234039d207443c003cfea.jpg?ex=69143c27&is=6912eaa7&hm=1c78cef65c988c19215a9e073de4b3ee4e8a389622e25b58b996570d842cd95d&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437710999820963851/dif7d1l-d1d00769-f287-4f94-bbbf-21ac77e908a3.png?ex=69143c35&is=6912eab5&hm=796dd14571ade4039f1c15baf971f86589b4da6f7ba7ed0faf4f761c23f0cef3&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437711811179839529/Call_of_Duty_Black_Ops_7_Key_Art.png?ex=69143cf7&is=6912eb77&hm=08f0afb57b57d2809558cf228d17b8db82ecaf7cc3e0ea702b6e6723cff6d2bc&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437711835494219847/call-of-duty-black-ops-4-cover-image-2sp.png?ex=69143cfc&is=6912eb7c&hm=6c4cd5543cad679d47602ada0f48880a62b96d7649687dac2b0eaa94b2c6a478&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437712562660573315/call_of_duty___black_ops_cold_war___icon_by_shamo45_dg18rlo-fullview.png?ex=69143daa&is=6912ec2a&hm=adfee1c27fcf1d9fe38387117a9e552b746378bd1d7a4bc72ec4d900f8d91080&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437712593073602641/dghd6rn-fe21905b-381b-4298-aeea-59fc43dc3d33.png?ex=69143db1&is=6912ec31&hm=3ad067a0c092fef033e5905fe0dc65facdd9abccfa4e1259c862677e02ad8da5&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437712562660573315/call_of_duty___black_ops_cold_war___icon_by_shamo45_dg18rlo-fullview.png?ex=69143daa&is=6912ec2a&hm=adfee1c27fcf1d9fe38387117a9e552b746378bd1d7a4bc72ec4d900f8d91080&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437712593073602641/dghd6rn-fe21905b-381b-4298-aeea-59fc43dc3d33.png?ex=69143db1&is=6912ec31&hm=3ad067a0c092fef033e5905fe0dc65facdd9abccfa4e1259c862677e02ad8da5&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713369233883198/images_3-Photoroom.png?ex=69143e6a&is=6912ecea&hm=db11c0077f42b115e6bdfb0e768e68bbcb7390e5490bc38d9046dd29c1d6222e&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713369233883198/images_3-Photoroom.png?ex=69143e6a&is=6912ecea&hm=db11c0077f42b115e6bdfb0e768e68bbcb7390e5490bc38d9046dd29c1d6222e&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713394932252736/imgbin-call-of-duty-ghosts-call-of-duty-4-modern-warfare-call-of-duty-modern-warfare-2-call-of-duty-black-ops-ii-cod-auY4ta9Kvn5RWkXhEZyi8e2Fm-Photoroom.png?ex=69143e70&is=6912ecf0&hm=4345118817372bb9066ff70edd3bb619fafcf9ccb2c229d2165b1c313da867da&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713405346713750/images_1-Photoroom_1.png?ex=69143e73&is=6912ecf3&hm=8168eaea5a5a3f7dc3cea362f3294640f5de4ab84843f913550b9479771d0747&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713904880058528/48ee6f68eff851b5d3e15d8052389ecc-Photoroom.png?ex=69143eea&is=6912ed6a&hm=a250eeed1651bbc110fc7b70868a2caa35af565a2f6cac803999b8150f7d17c1&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713938014797926/call-of-duty-black-ops-2-zombies-icon-png-clipart-Photoroom.png?ex=69143ef2&is=6912ed72&hm=82d48f110cc774388f8c3393a9351866e41ca60592f7adee676878109b515604&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713958940311604/kisspng-call-of-duty-black-ops-ii-call-of-duty-zombies-c-black-ops-2-hack-download-5bac18e7531cf6.7253333715380052233404-Photoroom.png?ex=69143ef7&is=6912ed77&hm=5067d8e872bd63e810edfb9401b1de6ab94a168d762e0fb4e9c792b1660ef871&', // Call of Duty
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437715891847696446/images-Photoroom_8.png?ex=691440c4&is=6912ef44&hm=88df04a4590dc8712749f53140a8d627a22d7fd64d72f5645f1b37966dc813c2&', // PUBG
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437715907022684240/battlefield_PNG98.png?ex=691440c7&is=6912ef47&hm=03a5e76aea079c065ba00225dd261f1f204f4cb70e81d893c2adb32090124d38&', // Battlefield
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437715924517130311/images-Photoroom_7.png?ex=691440cb&is=6912ef4b&hm=6158f15036131ff0eba5e1dd25707d81db07b99ddf04034458f98d30f649a9d4&', // Roblox
         ];
 
         // Create falling game logos animation
         function createFallingLogo() {
             const bgAnimation = document.getElementById('bgAnimation');
-            const logo = document.createElement('div');
-            logo.className = 'falling-logo';
-            logo.textContent = gameLogos[Math.floor(Math.random() * gameLogos.length)];
-            logo.style.left = Math.random() * 100 + '%';
-            logo.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            logo.style.animationDelay = Math.random() * 5 + 's';
+            const logoContainer = document.createElement('div');
+            logoContainer.className = 'falling-logo';
             
-            const colors = ['#8b5cf6', '#ec4899', '#3b82f6', '#10b981', '#f59e0b'];
-            logo.style.color = colors[Math.floor(Math.random() * colors.length)];
+            const img = document.createElement('img');
+            img.src = gameLogos[Math.floor(Math.random() * gameLogos.length)];
+            img.alt = 'Game Logo';
             
-            bgAnimation.appendChild(logo);
+            logoContainer.appendChild(img);
+            logoContainer.style.left = Math.random() * 100 + '%';
+            logoContainer.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            logoContainer.style.animationDelay = Math.random() * 5 + 's';
             
-            setTimeout(() => {
-                logo.remove();
-            }, 20000);
+            bgAnimation.appendChild(logoContainer);
+            
+            setTimeout(() => logoContainer.remove(), 25000);
         }
 
-        // Create multiple falling logos
-        setInterval(createFallingLogo, 800);
-        for(let i = 0; i < 15; i++) {
-            setTimeout(createFallingLogo, i * 500);
+        // Create falling logos
+        setInterval(createFallingLogo, 1000);
+        for(let i = 0; i < 12; i++) {
+            setTimeout(createFallingLogo, i * 800);
         }
 
-        function formatUptime(seconds) {
-            const hours = Math.floor(seconds / 3600);
-            const minutes = Math.floor((seconds % 3600) / 60);
-            return hours > 0 ? `${hours}h` : `${minutes}m`;
-        }
+        // Active nav link highlighting
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-links a');
 
-        async function fetchBotStatus() {
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Try to fetch bot status (will likely fail due to Mixed Content)
+        async function tryFetchBotStatus() {
             try {
-                const [healthRes, gamelinksRes] = await Promise.all([
-                    fetch(`${API_URL}/health`),
-                    fetch(`${API_URL}/gamelinks`)
-                ]);
-
-                if (!healthRes.ok) throw new Error('API not responding');
-
-                const healthData = await healthRes.json();
-                const gamelinksData = await gamelinksRes.json();
-
-                const linkCount = Object.keys(gamelinksData.data || {}).length;
-                document.getElementById('totalLinks').textContent = linkCount;
-                document.getElementById('uptime').textContent = formatUptime(healthData.uptime || 0);
-                document.getElementById('apiStatus').textContent = '🟢 Online';
-
-                const isOnline = healthData.status === 'ok';
+                const response = await fetch('http://193.31.31.121:25908/api/health');
+                const data = await response.json();
                 
-                document.getElementById('statusContainer').innerHTML = `
-                    <div class="status-grid">
-                        <div class="status-card">
-                            <div class="status-header">
-                                <h3>Discord Bot</h3>
-                                <div class="status-indicator ${isOnline ? 'status-online' : 'status-offline'}"></div>
-                            </div>
-                            <div class="status-info">
-                                <div class="status-row">
-                                    <span class="status-label">Status</span>
-                                    <span class="status-value">${isOnline ? '🟢 Online' : '🔴 Offline'}</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Bot Tag</span>
-                                    <span class="status-value">${healthData.bot || 'N/A'}</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Uptime</span>
-                                    <span class="status-value">${formatUptime(healthData.uptime || 0)}</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Version</span>
-                                    <span class="status-value">2.0.0</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="status-card">
-                            <div class="status-header">
-                                <h3>REST API</h3>
-                                <div class="status-indicator status-online"></div>
-                            </div>
-                            <div class="status-info">
-                                <div class="status-row">
-                                    <span class="status-label">Status</span>
-                                    <span class="status-value">🟢 Connected</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Framework</span>
-                                    <span class="status-value">Express.js</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">CORS</span>
-                                    <span class="status-value">Enabled</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Linked Accounts</span>
-                                    <span class="status-value">${linkCount}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="status-card">
-                            <div class="status-header">
-                                <h3>Database</h3>
-                                <div class="status-indicator status-online"></div>
-                            </div>
-                            <div class="status-info">
-                                <div class="status-row">
-                                    <span class="status-label">Type</span>
-                                    <span class="status-value">JSON Storage</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Collections</span>
-                                    <span class="status-value">3</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Cache TTL</span>
-                                    <span class="status-value">5 minutes</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Status</span>
-                                    <span class="status-value">🟢 Active</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="status-card">
-                            <div class="status-header">
-                                <h3>Game Scrapers</h3>
-                                <div class="status-indicator status-online"></div>
-                            </div>
-                            <div class="status-info">
-                                <div class="status-row">
-                                    <span class="status-label">Roblox</span>
-                                    <span class="status-value">✓ Active</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Fortnite</span>
-                                    <span class="status-value">✓ Active</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Call of Duty</span>
-                                    <span class="status-value">✓ Active</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">PUBG</span>
-                                    <span class="status-value">✓ Active</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Battlefield</span>
-                                    <span class="status-value">✓ Active</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                // If successful, update stats
+                if (data.uptime) {
+                    const hours = Math.floor(data.uptime / 3600);
+                    const minutes = Math.floor((data.uptime % 3600) / 60);
+                    const uptimeText = hours > 0 ? `${hours}h` : `${minutes}m`;
+                    document.getElementById('uptime').textContent = uptimeText;
+                }
             } catch (error) {
-                console.error('Failed to fetch bot status:', error);
-                
-                // Show warning about mixed content
-                document.getElementById('mixedContentWarning').style.display = 'block';
-                document.getElementById('apiStatus').textContent = '⚠️ Cannot Connect';
-                document.getElementById('totalLinks').textContent = '--';
-                document.getElementById('uptime').textContent = '--';
-                
-                // Show static fallback status
-                document.getElementById('statusContainer').innerHTML = `
-                    <div class="status-grid">
-                        <div class="status-card">
-                            <div class="status-header">
-                                <h3>Bot Information</h3>
-                                <div class="status-indicator status-online"></div>
-                            </div>
-                            <div class="status-info">
-                                <div class="status-row">
-                                    <span class="status-label">Name</span>
-                                    <span class="status-value">Ops Link Bot</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Version</span>
-                                    <span class="status-value">2.0.0</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Framework</span>
-                                    <span class="status-value">Discord.js 14</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Platform</span>
-                                    <span class="status-value">Node.js + Express</span>
-                                </div>
-                            </div>
-                        </div>
+                // Expected to fail due to Mixed Content policy
+                console.log('Cannot fetch bot API from HTTPS site (Mixed Content policy)');
+            }
 
-                        <div class="status-card">
-                            <div class="status-header">
-                                <h3>Supported Games</h3>
-                                <div class="status-indicator status-online"></div>
-                            </div>
-                            <div class="status-info">
-                                <div class="status-row">
-                                    <span class="status-label">🎮 Roblox</span>
-                                    <span class="status-value">Stats & Badges</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">🔫 Fortnite</span>
-                                    <span class="status-value">K/D & Wins</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">💥 Call of Duty</span>
-                                    <span class="status-value">Warzone Stats</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">🪂 PUBG</span>
-                                    <span class="status-value">Battlegrounds</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">⚔️ Battlefield</span>
-                                    <span class="status-value">Player Stats</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="status-card">
-                            <div class="status-header">
-                                <h3>API Features</h3>
-                                <div class="status-indicator status-online"></div>
-                            </div>
-                            <div class="status-info">
-                                <div class="status-row">
-                                    <span class="status-label">REST API</span>
-                                    <span class="status-value">✓ Available</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">CORS</span>
-                                    <span class="status-value">✓ Enabled</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Database</span>
-                                    <span class="status-value">JSON Storage</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Caching</span>
-                                    <span class="status-value">5 min TTL</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="status-card">
-                            <div class="status-header">
-                                <h3>TXAdmin</h3>
-                                <div class="status-indicator status-online"></div>
-                            </div>
-                            <div class="status-info">
-                                <div class="status-row">
-                                    <span class="status-label">Server Control</span>
-                                    <span class="status-value">✓ Supported</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Player Management</span>
-                                    <span class="status-value">✓ Kick/Ban</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Status Monitor</span>
-                                    <span class="status-value">✓ Real-time</span>
-                                </div>
-                                <div class="status-row">
-                                    <span class="status-label">Platform</span>
-                                    <span class="status-value">FiveM/GTA</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
+            try {
+                const response = await fetch('http://193.31.31.121:25908/api/gamelinks');
+                const data = await response.json();
+                const linkCount = Object.keys(data.data || {}).length;
+                document.getElementById('totalLinks').textContent = linkCount;
+            } catch (error) {
+                console.log('Cannot fetch gamelinks from API');
             }
         }
 
-        // Initial fetch
-        fetchBotStatus();
-
-        // Auto-refresh every 30 seconds
-        setInterval(fetchBotStatus, 30000);
+        // Try once on load
+        tryFetchBotStatus();
     </script>
 </body>
-</html>
+</html>-label">Name</span>
+                            <span class="status-value">Ops Link Bot</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Version</span>
+                            <span class="status-value">2.0.0</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Framework</span>
+                            <span class="status-value">Discord.js 14</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Platform</span>
+                            <span class="status-value">Node.js + Express</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <div class="status-header">
+                        <h3>Supported Games</h3>
+                        <div class="status-indicator status-online"></div>
+                    </div>
+                    <div class="status-info">
+                        <div class="status-row">
+                            <span class="status-label">🎮 Roblox</span>
+                            <span class="status-value">Stats & Badges</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">🔫 Fortnite</span>
+                            <span class="status-value">K/D & Wins</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">💥 Call of Duty</span>
+                            <span class="status-value">Warzone Stats</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">🪂 PUBG</span>
+                            <span class="status-value">Battlegrounds</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">⚔️ Battlefield</span>
+                            <span class="status-value">Player Stats</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <div class="status-header">
+                        <h3>API Features</h3>
+                        <div class="status-indicator status-online"></div>
+                    </div>
+                    <div class="status-info">
+                        <div class="status-row">
+                            <span class="status-label">REST API</span>
+                            <span class="status-value">✓ Available</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">CORS</span>
+                            <span class="status-value">✓ Enabled</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status
