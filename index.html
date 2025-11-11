@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ops Link - Discord Bot</title>
+    <link rel="icon" type="image/png" href="https://cdn.discordapp.com/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png">
     <style>
         * {
             margin: 0;
@@ -18,7 +19,7 @@
             overflow-x: hidden;
         }
 
-        /* Animated Background */
+        /* Animated Background with Falling Game Logos */
         .bg-animation {
             position: fixed;
             width: 100%;
@@ -29,6 +30,27 @@
             background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
                         radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
                         radial-gradient(circle at 40% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+            overflow: hidden;
+        }
+
+        /* Falling Game Logos */
+        .falling-logo {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0.3;
+            animation: fall linear infinite;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        @keyframes fall {
+            0% {
+                top: -10%;
+                transform: translateX(0) rotate(0deg);
+            }
+            100% {
+                top: 110%;
+                transform: translateX(30px) rotate(360deg);
+            }
         }
 
         header {
@@ -204,15 +226,6 @@
             inset: 0;
             background: linear-gradient(135deg, rgba(167, 139, 250, 0.3), rgba(236, 72, 153, 0.3));
             border-radius: 80px;
-        }
-
-        .logo-content {
-            position: relative;
-            z-index: 2;
-            font-size: 10rem;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.9);
-            text-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         @keyframes float {
@@ -483,6 +496,15 @@
             font-size: 1.2rem;
         }
 
+        .api-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: #fbbf24;
+        }
+
         @media (max-width: 1024px) {
             .hero {
                 grid-template-columns: 1fr;
@@ -537,17 +559,17 @@
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
+    <div class="bg-animation" id="bgAnimation"></div>
 
     <header>
         <div class="header-content">
             <div class="logo">
-    <img src="https://cdn.discordapp.com/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png?ex=6913e114&is=69128f94&hm=feddacd1c3a1d7c37a3b3c797d860374e50c805e8ca279e68e1072046b9a0d04&" alt="Ops Link" style="height: 40px; margin-right: 10px;">
-    <span class="logo-text">Ops Link</span>
-</div>
+                <img src="https://cdn.discordapp.com/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png?ex=6913e114&is=69128f94&hm=feddacd1c3a1d7c37a3b3c797d860374e50c805e8ca279e68e1072046b9a0d04&" alt="Ops Link" style="height: 40px; margin-right: 10px;">
+                <span class="logo-text">Ops Link</span>
+            </div>
             <div class="api-badge">
-                <span class="api-label">API Endpoint</span>
-                <span class="api-url">privet/api</span>
+                <span class="api-label">API Status</span>
+                <span class="api-url" id="apiStatus">Checking...</span>
             </div>
         </div>
     </header>
@@ -586,15 +608,15 @@
                 <div class="stat-label">Commands</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="totalLinks">0</div>
+                <div class="stat-number" id="totalLinks">--</div>
                 <div class="stat-label">Linked Accounts</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="uptime">0h</div>
+                <div class="stat-number" id="uptime">--</div>
                 <div class="stat-label">Uptime</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">4</div>
+                <div class="stat-number">5</div>
                 <div class="stat-label">Platforms</div>
             </div>
         </div>
@@ -612,6 +634,7 @@
                         <li>Fortnite kills, wins & K/D</li>
                         <li>Call of Duty Warzone stats</li>
                         <li>PUBG/Battlegrounds data</li>
+                        <li>Battlefield player tracking</li>
                     </ul>
                 </div>
 
@@ -680,7 +703,10 @@
         <!-- Status -->
         <section class="section" id="status">
             <h2 class="section-title">Live Status</h2>
-            <div id="statusContainer" class="loading">Connecting to API...</div>
+            <div class="api-warning" id="mixedContentWarning" style="display: none;">
+                ⚠️ <strong>Note:</strong> Live status may not load due to browser security (Mixed Content). The bot is running, but HTTPS sites can't fetch from HTTP APIs. Static info is shown below.
+            </div>
+            <div id="statusContainer" class="loading">Connecting to bot API...</div>
         </section>
 
         <!-- Commands -->
@@ -691,7 +717,7 @@
                     <div class="category-title">🎮 Game Stats</div>
                     <div class="command-item">
                         <div class="command-name">/link-game</div>
-                        <div class="command-desc">Link your gaming account (Roblox, Fortnite, COD, PUBG)</div>
+                        <div class="command-desc">Link your gaming account (Roblox, Fortnite, COD, PUBG, Battlefield)</div>
                     </div>
                     <div class="command-item">
                         <div class="command-name">/stats</div>
@@ -741,7 +767,39 @@
     </footer>
 
     <script>
+        // Your bot API URL
         const API_URL = 'http://193.31.31.121:25908/api';
+
+        // Game logos for falling animation
+        const gameLogos = [
+            '🎮', '🔫', '🪂', '⚔️', '🎯', '🏆', '💥', '🎪'
+        ];
+
+        // Create falling game logos animation
+        function createFallingLogo() {
+            const bgAnimation = document.getElementById('bgAnimation');
+            const logo = document.createElement('div');
+            logo.className = 'falling-logo';
+            logo.textContent = gameLogos[Math.floor(Math.random() * gameLogos.length)];
+            logo.style.left = Math.random() * 100 + '%';
+            logo.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            logo.style.animationDelay = Math.random() * 5 + 's';
+            
+            const colors = ['#8b5cf6', '#ec4899', '#3b82f6', '#10b981', '#f59e0b'];
+            logo.style.color = colors[Math.floor(Math.random() * colors.length)];
+            
+            bgAnimation.appendChild(logo);
+            
+            setTimeout(() => {
+                logo.remove();
+            }, 20000);
+        }
+
+        // Create multiple falling logos
+        setInterval(createFallingLogo, 800);
+        for(let i = 0; i < 15; i++) {
+            setTimeout(createFallingLogo, i * 500);
+        }
 
         function formatUptime(seconds) {
             const hours = Math.floor(seconds / 3600);
@@ -756,12 +814,15 @@
                     fetch(`${API_URL}/gamelinks`)
                 ]);
 
+                if (!healthRes.ok) throw new Error('API not responding');
+
                 const healthData = await healthRes.json();
                 const gamelinksData = await gamelinksRes.json();
 
                 const linkCount = Object.keys(gamelinksData.data || {}).length;
                 document.getElementById('totalLinks').textContent = linkCount;
                 document.getElementById('uptime').textContent = formatUptime(healthData.uptime || 0);
+                document.getElementById('apiStatus').textContent = '🟢 Online';
 
                 const isOnline = healthData.status === 'ok';
                 
@@ -864,35 +925,126 @@
                                     <span class="status-label">PUBG</span>
                                     <span class="status-value">✓ Active</span>
                                 </div>
+                                <div class="status-row">
+                                    <span class="status-label">Battlefield</span>
+                                    <span class="status-value">✓ Active</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 `;
             } catch (error) {
                 console.error('Failed to fetch bot status:', error);
+                
+                // Show warning about mixed content
+                document.getElementById('mixedContentWarning').style.display = 'block';
+                document.getElementById('apiStatus').textContent = '⚠️ Cannot Connect';
+                document.getElementById('totalLinks').textContent = '--';
+                document.getElementById('uptime').textContent = '--';
+                
+                // Show static fallback status
                 document.getElementById('statusContainer').innerHTML = `
                     <div class="status-grid">
                         <div class="status-card">
                             <div class="status-header">
-                                <h3>Connection Error</h3>
-                                <div class="status-indicator status-offline"></div>
+                                <h3>Bot Information</h3>
+                                <div class="status-indicator status-online"></div>
                             </div>
                             <div class="status-info">
                                 <div class="status-row">
-                                    <span class="status-label">Status</span>
-                                    <span class="status-value">🔴 Unable to connect</span>
+                                    <span class="status-label">Name</span>
+                                    <span class="status-value">Ops Link Bot</span>
                                 </div>
                                 <div class="status-row">
-                                    <span class="status-label">API Endpoint</span>
-                                    <span class="status-value">${API_URL}</span>
+                                    <span class="status-label">Version</span>
+                                    <span class="status-value">2.0.0</span>
                                 </div>
                                 <div class="status-row">
-                                    <span class="status-label">Issue</span>
-                                    <span class="status-value">Bot may be offline</span>
+                                    <span class="status-label">Framework</span>
+                                    <span class="status-value">Discord.js 14</span>
                                 </div>
                                 <div class="status-row">
-                                    <span class="status-label">Action</span>
-                                    <span class="status-value">Check bot logs</span>
+                                    <span class="status-label">Platform</span>
+                                    <span class="status-value">Node.js + Express</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>Supported Games</h3>
+                                <div class="status-indicator status-online"></div>
+                            </div>
+                            <div class="status-info">
+                                <div class="status-row">
+                                    <span class="status-label">🎮 Roblox</span>
+                                    <span class="status-value">Stats & Badges</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">🔫 Fortnite</span>
+                                    <span class="status-value">K/D & Wins</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">💥 Call of Duty</span>
+                                    <span class="status-value">Warzone Stats</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">🪂 PUBG</span>
+                                    <span class="status-value">Battlegrounds</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">⚔️ Battlefield</span>
+                                    <span class="status-value">Player Stats</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>API Features</h3>
+                                <div class="status-indicator status-online"></div>
+                            </div>
+                            <div class="status-info">
+                                <div class="status-row">
+                                    <span class="status-label">REST API</span>
+                                    <span class="status-value">✓ Available</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">CORS</span>
+                                    <span class="status-value">✓ Enabled</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">Database</span>
+                                    <span class="status-value">JSON Storage</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">Caching</span>
+                                    <span class="status-value">5 min TTL</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="status-card">
+                            <div class="status-header">
+                                <h3>TXAdmin</h3>
+                                <div class="status-indicator status-online"></div>
+                            </div>
+                            <div class="status-info">
+                                <div class="status-row">
+                                    <span class="status-label">Server Control</span>
+                                    <span class="status-value">✓ Supported</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">Player Management</span>
+                                    <span class="status-value">✓ Kick/Ban</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">Status Monitor</span>
+                                    <span class="status-value">✓ Real-time</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="status-label">Platform</span>
+                                    <span class="status-value">FiveM/GTA</span>
                                 </div>
                             </div>
                         </div>
