@@ -5,836 +5,417 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ops Link - Discord Bot</title>
     <link rel="icon" type="image/png" href="https://media.discordapp.net/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png?ex=6915db54&is=691489d4&hm=6567367c29f3b1f3b7329d83027ea81c6cd7da7a500cd676ffb6a9f2fe0bf03d&=&format=webp&quality=lossless&width=648&height=648">
-    <link rel="shortcut icon" type="image/png" href="https://media.discordapp.net/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png?ex=6915db54&is=691489d4&hm=6567367c29f3b1f3b7329d83027ea81c6cd7da7a500cd676ffb6a9f2fe0bf03d&=&format=webp&quality=lossless&width=648&height=648">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-            background: #1a1a2e;
-            color: #fff;
-            overflow-x: hidden;
-        }
-
-        /* Animated Background with Falling Game Logos */
-        .bg-animation {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
-            overflow: hidden;
-        }
-
-        /* Falling Game Logos */
-        .falling-logo {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            opacity: 0.4;
-            animation: fall linear infinite;
-            filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.8));
-        }
-        
-        .falling-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        @keyframes fall {
-            0% {
-                top: -10%;
-                transform: translateX(0) rotate(0deg);
-            }
-            100% {
-                top: 110%;
-                transform: translateX(30px) rotate(360deg);
-            }
-        }
-
-        /* Navigation */
-        nav {
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .nav-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-size: 1.5rem;
-            font-weight: 800;
-        }
-
-        .nav-logo img {
-            height: 45px;
-            width: 45px;
-            object-fit: contain;
-        }
-
-        .logo-text {
-            background: linear-gradient(135deg, #8b5cf6, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: #94a3b8;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-        }
-
-        .nav-links a:hover {
-            color: #fff;
-            background: rgba(139, 92, 246, 0.1);
-        }
-
-        .nav-links a.active {
-            color: #8b5cf6;
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 100px 2rem 4rem;
-        }
-
-        /* Section Styling */
-        section {
-            min-height: 100vh;
-            padding: 4rem 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .section-title {
-            font-size: 3.5rem;
-            font-weight: 900;
-            margin-bottom: 3rem;
-            text-align: center;
-            background: linear-gradient(135deg, #fff, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Hero Section */
-        .hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6rem;
-            align-items: center;
-        }
-
-        .hero-content h1 {
-            font-size: 5rem;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #fff 0%, #8b5cf6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-content p {
-            color: #94a3b8;
-            line-height: 1.8;
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-
-        .feature-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-bottom: 2rem;
-        }
-
-        .tag {
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a78bfa;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 1.2rem 2.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #8b5cf6, #ec4899);
-            color: #fff;
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid rgba(139, 92, 246, 0.5);
-            color: #fff;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(139, 92, 246, 0.1);
-            border-color: #8b5cf6;
-        }
-
-        .logo-showcase {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .logo-card {
-            width: 450px;
-            height: 450px;
-            background: linear-gradient(135deg, #a78bfa 0%, #ec4899 50%, #8b5cf6 100%);
-            border-radius: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: float 6s ease-in-out infinite;
-            box-shadow: 0 30px 80px rgba(139, 92, 246, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .logo-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(167, 139, 250, 0.3), rgba(236, 72, 153, 0.3));
-            border-radius: 80px;
-        }
-
-        .logo-card img {
-            position: relative;
-            z-index: 2;
-            width: 70%;
-            height: 70%;
-            object-fit: contain;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(-2deg); }
-            50% { transform: translateY(-20px) rotate(2deg); }
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .stat-card {
-            background: rgba(139, 92, 246, 0.05);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 25px;
-            padding: 2.5rem;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-10px);
-            border-color: #8b5cf6;
-            box-shadow: 0 20px 50px rgba(139, 92, 246, 0.3);
-        }
-
-        .stat-number {
-            font-size: 3.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #8b5cf6, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #94a3b8;
-            font-weight: 600;
-        }
-
-        /* Features Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background: rgba(139, 92, 246, 0.05);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 25px;
-            padding: 2.5rem;
-            transition: all 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            border-color: #8b5cf6;
-            box-shadow: 0 20px 50px rgba(139, 92, 246, 0.2);
-        }
-
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #8b5cf6, #ec4899);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card p {
-            color: #94a3b8;
-            line-height: 1.7;
-            margin-bottom: 1rem;
-        }
-
-        .feature-list {
-            list-style: none;
-        }
-
-        .feature-list li {
-            padding: 0.6rem 0;
-            color: #94a3b8;
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-            font-size: 0.95rem;
-        }
-
-        .feature-list li::before {
-            content: '✓';
-            color: #8b5cf6;
-            font-weight: bold;
-            font-size: 1.3rem;
-        }
-
-        /* Commands Grid */
-        .commands-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        .command-category {
-            background: rgba(139, 92, 246, 0.05);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 25px;
-            padding: 2.5rem;
-        }
-
-        .category-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #8b5cf6;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .command-item {
-            background: rgba(139, 92, 246, 0.05);
-            border: 1px solid rgba(139, 92, 246, 0.1);
-            border-radius: 15px;
-            padding: 1.2rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s;
-        }
-
-        .command-item:hover {
-            background: rgba(139, 92, 246, 0.1);
-            border-color: #8b5cf6;
-            transform: translateX(10px);
-        }
-
-        .command-name {
-            font-family: 'Courier New', monospace;
-            color: #ec4899;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            font-size: 1.05rem;
-        }
-
-        .command-desc {
-            color: #94a3b8;
-            font-size: 0.95rem;
-        }
-
-        /* Status Section */
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        .status-card {
-            background: rgba(139, 92, 246, 0.05);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 25px;
-            padding: 2.5rem;
-            transition: all 0.3s;
-        }
-
-        .status-card:hover {
-            transform: translateY(-5px);
-            border-color: #8b5cf6;
-            box-shadow: 0 20px 50px rgba(139, 92, 246, 0.3);
-        }
-
-        .status-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-        }
-
-        .status-header h3 {
-            font-size: 1.5rem;
-        }
-
-        .status-indicator {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .status-online {
-            background: #10b981;
-            box-shadow: 0 0 25px #10b981;
-        }
-
-        .status-offline {
-            background: #ef4444;
-            box-shadow: 0 0 25px #ef4444;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .status-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .status-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.8rem 0;
-        }
-
-        .status-label {
-            color: #94a3b8;
-        }
-
-        .status-value {
-            font-weight: 600;
-        }
-
-        .api-warning {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            color: #fbbf24;
-            text-align: center;
-        }
-
-        /* Footer */
-        footer {
-            background: rgba(26, 26, 46, 0.9);
-            padding: 3rem 2rem;
-            text-align: center;
-            border-top: 1px solid rgba(139, 92, 246, 0.2);
-            margin-top: 6rem;
-        }
-
-        footer p {
-            color: #94a3b8;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .hero {
-                grid-template-columns: 1fr;
-                gap: 4rem;
-            }
-
-            .hero-content h1 {
-                font-size: 3.5rem;
-            }
-
-            .logo-card {
-                width: 350px;
-                height: 350px;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .features-grid,
-            .commands-grid,
-            .status-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .nav-links {
-                display: none;
-            }
-
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .section-title {
-                font-size: 2.5rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Inter', 'Segoe UI', sans-serif; background: #1a1a2e; color: #fff; overflow-x: hidden; }
+        .bg-animation { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 0; background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%); overflow: hidden; }
+        .falling-logo { position: absolute; width: 60px; height: 60px; opacity: 0.4; animation: fall linear infinite; filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.8)); }
+        .falling-logo img { width: 100%; height: 100%; object-fit: contain; }
+        @keyframes fall { 0% { top: -10%; transform: translateX(0) rotate(0deg); } 100% { top: 110%; transform: translateX(30px) rotate(360deg); } }
+        nav { background: rgba(26, 26, 46, 0.95); backdrop-filter: blur(20px); padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid rgba(139, 92, 246, 0.3); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+        .nav-content { max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { display: flex; align-items: center; gap: 1rem; font-size: 1.5rem; font-weight: 800; cursor: pointer; }
+        .nav-logo img { height: 45px; width: 45px; object-fit: contain; }
+        .logo-text { background: linear-gradient(135deg, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.3s; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; }
+        .nav-links a:hover, .nav-links a.active { color: #fff; background: rgba(139, 92, 246, 0.1); }
+        .page { display: none; position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 120px 2rem 4rem; min-height: 100vh; }
+        .page.active { display: block; }
+        .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; min-height: 70vh; }
+        .hero-content h1 { font-size: 5rem; font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; background: linear-gradient(135deg, #fff 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-content p { color: #94a3b8; line-height: 1.8; font-size: 1.2rem; margin-bottom: 2rem; }
+        .feature-tags { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 2rem; }
+        .tag { background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; color: #a78bfa; }
+        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .btn { padding: 1.2rem 2.5rem; font-size: 1rem; font-weight: 600; border-radius: 50px; cursor: pointer; transition: all 0.3s; border: none; text-decoration: none; display: inline-block; }
+        .btn-primary { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5); }
+        .btn-secondary { background: transparent; border: 2px solid rgba(139, 92, 246, 0.5); color: #fff; }
+        .btn-secondary:hover { background: rgba(139, 92, 246, 0.1); border-color: #8b5cf6; }
+        .logo-showcase { position: relative; display: flex; justify-content: center; align-items: center; }
+        .logo-card { width: 450px; height: 450px; background: linear-gradient(135deg, #a78bfa 0%, #ec4899 50%, #8b5cf6 100%); border-radius: 80px; display: flex; align-items: center; justify-content: center; animation: float 6s ease-in-out infinite; box-shadow: 0 30px 80px rgba(139, 92, 246, 0.4); position: relative; overflow: hidden; }
+        .logo-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(167, 139, 250, 0.3), rgba(236, 72, 153, 0.3)); border-radius: 80px; }
+        .logo-card img { position: relative; z-index: 2; width: 70%; height: 70%; object-fit: contain; }
+        @keyframes float { 0%, 100% { transform: translateY(0px) rotate(-2deg); } 50% { transform: translateY(-20px) rotate(2deg); } }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin: 4rem 0; }
+        .stat-card { background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 25px; padding: 2.5rem; text-align: center; transition: all 0.3s; }
+        .stat-card:hover { transform: translateY(-10px); border-color: #8b5cf6; box-shadow: 0 20px 50px rgba(139, 92, 246, 0.3); }
+        .stat-number { font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
+        .stat-label { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; font-weight: 600; }
+        .section-title { font-size: 3.5rem; font-weight: 900; margin-bottom: 3rem; text-align: center; background: linear-gradient(135deg, #fff, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; }
+        .feature-card { background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 25px; padding: 2.5rem; transition: all 0.3s; }
+        .feature-card:hover { transform: translateY(-10px); border-color: #8b5cf6; box-shadow: 0 20px 50px rgba(139, 92, 246, 0.2); }
+        .feature-icon { width: 70px; height: 70px; background: linear-gradient(135deg, #8b5cf6, #ec4899); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1.5rem; }
+        .feature-card h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+        .feature-card p { color: #94a3b8; line-height: 1.7; margin-bottom: 1rem; }
+        .feature-list { list-style: none; }
+        .feature-list li { padding: 0.6rem 0; color: #94a3b8; display: flex; align-items: center; gap: 0.7rem; font-size: 0.95rem; }
+        .feature-list li::before { content: '✓'; color: #8b5cf6; font-weight: bold; font-size: 1.3rem; }
+        .commands-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-top: 3rem; }
+        .command-category { background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 25px; padding: 2.5rem; }
+        .category-title { font-size: 1.5rem; font-weight: 700; color: #8b5cf6; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; }
+        .command-item { background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.1); border-radius: 15px; padding: 1.2rem; margin-bottom: 1rem; transition: all 0.3s; }
+        .command-item:hover { background: rgba(139, 92, 246, 0.1); border-color: #8b5cf6; transform: translateX(10px); }
+        .command-name { font-family: 'Courier New', monospace; color: #ec4899; font-weight: 700; margin-bottom: 0.5rem; font-size: 1.05rem; }
+        .command-desc { color: #94a3b8; font-size: 0.95rem; }
+        .status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-top: 3rem; }
+        .status-card { background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 25px; padding: 2.5rem; transition: all 0.3s; }
+        .status-card:hover { transform: translateY(-5px); border-color: #8b5cf6; box-shadow: 0 20px 50px rgba(139, 92, 246, 0.3); }
+        .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(139, 92, 246, 0.2); }
+        .status-header h3 { font-size: 1.5rem; }
+        .status-indicator { width: 16px; height: 16px; border-radius: 50%; animation: pulse 2s infinite; }
+        .status-online { background: #10b981; box-shadow: 0 0 25px #10b981; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .status-info { display: flex; flex-direction: column; gap: 1rem; }
+        .status-row { display: flex; justify-content: space-between; padding: 0.8rem 0; }
+        .status-label { color: #94a3b8; }
+        .status-value { font-weight: 600; }
+        .link-section { background: rgba(139, 92, 246, 0.05); border-radius: 30px; padding: 4rem; margin-top: 4rem; text-align: center; }
+        .link-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-top: 2rem; }
+        .link-option { background: rgba(139, 92, 246, 0.1); border: 2px solid rgba(139, 92, 246, 0.3); border-radius: 20px; padding: 2rem; transition: all 0.3s; cursor: pointer; }
+        .link-option:hover { border-color: #8b5cf6; transform: scale(1.05); }
+        .docs-section { margin: 3rem 0; }
+        .docs-content { background: rgba(139, 92, 246, 0.05); border-left: 4px solid #8b5cf6; padding: 2rem; border-radius: 15px; margin: 2rem 0; }
+        .docs-content h3 { color: #8b5cf6; margin-bottom: 1rem; }
+        .docs-content p, .docs-content li { color: #94a3b8; line-height: 1.8; margin-bottom: 0.5rem; }
+        .docs-content ul { margin-left: 2rem; margin-top: 1rem; }
+        footer { background: rgba(26, 26, 46, 0.9); padding: 3rem 2rem; text-align: center; border-top: 1px solid rgba(139, 92, 246, 0.2); margin-top: 6rem; }
+        footer p { color: #94a3b8; margin-bottom: 0.5rem; }
+        @media (max-width: 1024px) { .hero { grid-template-columns: 1fr; } .stats-grid, .features-grid, .commands-grid, .status-grid, .link-options { grid-template-columns: 1fr; } }
+        @media (max-width: 640px) { .nav-links { display: none; } .hero-content h1 { font-size: 2.5rem; } }
     </style>
 </head>
 <body>
     <div class="bg-animation" id="bgAnimation"></div>
-
-    <!-- Navigation -->
     <nav>
         <div class="nav-content">
-            <div class="nav-logo">
+            <div class="nav-logo" onclick="showPage('home')">
                 <img src="https://media.discordapp.net/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png?ex=6915db54&is=691489d4&hm=6567367c29f3b1f3b7329d83027ea81c6cd7da7a500cd676ffb6a9f2fe0bf03d&=&format=webp&quality=lossless&width=648&height=648" alt="Ops Link">
                 <span class="logo-text">Ops Link</span>
             </div>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#commands">Commands</a></li>
-                <li><a href="#status">Status</a></li>
+                <li><a onclick="showPage('home')" class="active">Home</a></li>
+                <li><a onclick="showPage('commands')">Commands</a></li>
+                <li><a onclick="showPage('status')">Status</a></li>
+                <li><a onclick="showPage('docs')">Documentation</a></li>
+                <li><a onclick="showPage('terms')">Terms/Policy</a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="container">
-        <!-- Home Section -->
-        <section id="home">
-            <div class="hero">
-                <div class="hero-content">
-                    <h1>Ops Link</h1>
-                    <p>Advanced Discord bot for tracking game statistics directly from source. Real-time stats for Roblox, Fortnite, Call of Duty, PUBG, and Battlefield with TXAdmin server management.</p>
-                    
-                    <div class="feature-tags">
-                        <span class="tag">🎮 Multi-Game Stats</span>
-                        <span class="tag">🖥️ TXAdmin Integration</span>
-                        <span class="tag">⚡ Direct API Scraping</span>
-                        <span class="tag">🔗 Account Linking</span>
-                    </div>
-
-                    <div class="hero-buttons">
-                        <a href="#status" class="btn btn-primary">View Status</a>
-                        <a href="#commands" class="btn btn-secondary">Commands</a>
-                    </div>
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Ops Link</h1>
+                <p>Advanced Discord bot for tracking game statistics directly from source. Real-time stats for Roblox, Fortnite, Call of Duty, PUBG, and Battlefield with TXAdmin server management.</p>
+                <div class="feature-tags">
+                    <span class="tag">🎮 Multi-Game Stats</span>
+                    <span class="tag">🖥️ TXAdmin Integration</span>
+                    <span class="tag">⚡ Direct API Scraping</span>
+                    <span class="tag">🔗 Account Linking</span>
                 </div>
-
-                <div class="logo-showcase">
-                    <div class="logo-card">
-                        <img src="https://media.discordapp.net/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png?ex=6915db54&is=691489d4&hm=6567367c29f3b1f3b7329d83027ea81c6cd7da7a500cd676ffb6a9f2fe0bf03d&=&format=webp&quality=lossless&width=648&height=648" alt="Ops Link">
-                    </div>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="showPage('status')">View Status</button>
+                    <button class="btn btn-secondary" onclick="showPage('commands')">Commands</button>
                 </div>
             </div>
-
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number">15+</div>
-                    <div class="stat-label">Commands</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalLinks">--</div>
-                    <div class="stat-label">Linked Accounts</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="uptime">--</div>
-                    <div class="stat-label">Uptime</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">Platforms</div>
+            <div class="logo-showcase">
+                <div class="logo-card">
+                    <img src="https://media.discordapp.net/attachments/1428592257581318255/1437613150504484926/OpsLink_2.0.png?ex=6915db54&is=691489d4&hm=6567367c29f3b1f3b7329d83027ea81c6cd7da7a500cd676ffb6a9f2fe0bf03d&=&format=webp&quality=lossless&width=648&height=648" alt="Ops Link">
                 </div>
             </div>
-        </section>
-
-        <!-- Features Section -->
-        <section id="features">
-            <h2 class="section-title">Features</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Direct Stats Scraping</h3>
-                    <p>Real-time game statistics directly from source APIs</p>
-                    <ul class="feature-list">
-                        <li>Roblox player stats & badges</li>
-                        <li>Fortnite kills, wins & K/D</li>
-                        <li>Call of Duty Warzone stats</li>
-                        <li>PUBG/Battlegrounds data</li>
-                        <li>Battlefield player tracking</li>
-                    </ul>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-number">15+</div><div class="stat-label">Commands</div></div>
+            <div class="stat-card"><div class="stat-number" id="totalLinks">--</div><div class="stat-label">Linked Accounts</div></div>
+            <div class="stat-card"><div class="stat-number" id="uptime">--</div><div class="stat-label">Uptime</div></div>
+            <div class="stat-card"><div class="stat-number">5</div><div class="stat-label">Platforms</div></div>
+        </div>
+        <h2 class="section-title">Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Direct Stats Scraping</h3>
+                <p>Real-time game statistics directly from source APIs</p>
+                <ul class="feature-list">
+                    <li>Roblox player stats & badges</li>
+                    <li>Fortnite kills, wins & K/D</li>
+                    <li>Call of Duty Warzone stats</li>
+                    <li>PUBG/Battlegrounds data</li>
+                    <li>Battlefield player tracking</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔗</div>
+                <h3>Account Linking</h3>
+                <p>Link gaming accounts once, access stats instantly</p>
+                <ul class="feature-list">
+                    <li>Per-server linking system</li>
+                    <li>Multi-platform support</li>
+                    <li>Easy unlink commands</li>
+                    <li>5-minute cache for speed</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🖥️</div>
+                <h3>TXAdmin Integration</h3>
+                <p>Manage FiveM/GTA servers from Discord</p>
+                <ul class="feature-list">
+                    <li>Server status monitoring</li>
+                    <li>Player list & management</li>
+                    <li>Kick players with reason</li>
+                    <li>Server restart command</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>REST API</h3>
+                <p>Full API for external integrations</p>
+                <ul class="feature-list">
+                    <li>JSON database access</li>
+                    <li>Real-time bot status</li>
+                    <li>CORS enabled</li>
+                    <li>Easy to integrate</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Performance</h3>
+                <p>Built for speed and reliability</p>
+                <ul class="feature-list">
+                    <li>Intelligent caching</li>
+                    <li>Rate limiting protection</li>
+                    <li>Async operations</li>
+                    <li>Error recovery</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>Logging</h3>
+                <p>Comprehensive monitoring system</p>
+                <ul class="feature-list">
+                    <li>Daily log files</li>
+                    <li>Command tracking</li>
+                    <li>Error reporting</li>
+                    <li>Colored console output</li>
+                </ul>
+            </div>
+        </div>
+        <div class="link-section">
+            <h2 class="section-title">Link Your Gaming Accounts</h2>
+            <p style="color: #94a3b8; font-size: 1.1rem; max-width: 800px; margin: 0 auto 2rem;">Connect your gaming accounts without joining Discord servers. The bot can link to your accounts using Discord OAuth. <strong>You must have a Discord account (required)</strong>.</p>
+            <div class="link-options">
+                <div class="link-option">
+                    <h3>🎮 Link via Discord</h3>
+                    <p style="color: #94a3b8;">Use Discord to authenticate and link your gaming accounts directly through the bot</p>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔗</div>
-                    <h3>Account Linking</h3>
-                    <p>Link gaming accounts once, access stats instantly</p>
-                    <ul class="feature-list">
-                        <li>Per-server linking system</li>
-                        <li>Multi-platform support</li>
-                        <li>Easy unlink commands</li>
-                        <li>5-minute cache for speed</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🖥️</div>
-                    <h3>TXAdmin Integration</h3>
-                    <p>Manage FiveM/GTA servers from Discord</p>
-                    <ul class="feature-list">
-                        <li>Server status monitoring</li>
-                        <li>Player list & management</li>
-                        <li>Kick players with reason</li>
-                        <li>Server restart command</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>REST API</h3>
-                    <p>Full API for external integrations</p>
-                    <ul class="feature-list">
-                        <li>JSON database access</li>
-                        <li>Real-time bot status</li>
-                        <li>CORS enabled</li>
-                        <li>Easy to integrate</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🚀</div>
-                    <h3>Performance</h3>
-                    <p>Built for speed and reliability</p>
-                    <ul class="feature-list">
-                        <li>Intelligent caching</li>
-                        <li>Rate limiting protection</li>
-                        <li>Async operations</li>
-                        <li>Error recovery</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📝</div>
-                    <h3>Logging</h3>
-                    <p>Comprehensive monitoring system</p>
-                    <ul class="feature-list">
-                        <li>Daily log files</li>
-                        <li>Command tracking</li>
-                        <li>Error reporting</li>
-                        <li>Colored console output</li>
-                    </ul>
+                <div class="link-option">
+                    <h3>🌐 Link via Website</h3>
+                    <p style="color: #94a3b8;">Link your accounts through our web interface powered by Discord OAuth</p>
                 </div>
             </div>
-        </section>
+            <div class="hero-buttons" style="justify-content: center; margin-top: 2rem;">
+                <button class="btn btn-primary">Link Account Now</button>
+                <button class="btn btn-secondary" onclick="showPage('docs')">Learn More</button>
+            </div>
+        </div>
+    </div>
 
-        <!-- Commands Section -->
-        <section id="commands">
-            <h2 class="section-title">Commands</h2>
-            <div class="commands-grid">
-                <div class="command-category">
-                    <div class="category-title">🎮 Game Stats</div>
-                    <div class="command-item">
-                        <div class="command-name">/link-game</div>
-                        <div class="command-desc">Link your gaming account (Roblox, Fortnite, COD, PUBG, Battlefield)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/stats</div>
-                        <div class="command-desc">View game statistics scraped directly from source</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unlink-game</div>
-                        <div class="command-desc">Remove linked gaming account</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/bot-info</div>
-                        <div class="command-desc">View bot version, uptime, and server count</div>
-                    </div>
+    <!-- COMMANDS PAGE -->
+    <div id="commands" class="page">
+        <h1 class="section-title">Bot Commands</h1>
+        <div class="commands-grid">
+            <div class="command-category">
+                <div class="category-title">🎮 Game Stats</div>
+                <div class="command-item">
+                    <div class="command-name">/link-game</div>
+                    <div class="command-desc">Link your gaming account (Roblox, Fortnite, COD, PUBG, Battlefield)</div>
                 </div>
-
-                <div class="command-category">
-                    <div class="category-title">🖥️ TXAdmin Server</div>
-                    <div class="command-item">
-                        <div class="command-name">/link-tx</div>
-                        <div class="command-desc">Connect TXAdmin server (Admin only)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/tx-status</div>
-                        <div class="command-desc">Show server status and player count</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/tx-players</div>
-                        <div class="command-desc">List all active players on server</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/tx-manage</div>
-                        <div class="command-desc">Kick players or restart server (Admin)</div>
-                    </div>
-                    <div class="command-item">
-                        <div class="command-name">/unlink-tx</div>
-                        <div class="command-desc">Disconnect TXAdmin server (Admin)</div>
-                    </div>
+                <div class="command-item">
+                    <div class="command-name">/stats</div>
+                    <div class="command-desc">View game statistics scraped directly from source</div>
+                </div>
+                <div class="command-item">
+                    <div class="command-name">/unlink-game</div>
+                    <div class="command-desc">Remove linked gaming account</div>
+                </div>
+                <div class="command-item">
+                    <div class="command-name">/bot-info</div>
+                    <div class="command-desc">View bot version, uptime, and server count</div>
                 </div>
             </div>
-        </section>
-
-        <!-- Status Section -->
-        <section id="status">
-            <h2 class="section-title">Live Status</h2>
-            <div class="api-warning">
-                ⚠️ <strong>Note:</strong> Live API stats are unavailable due to browser security (HTTPS cannot fetch HTTP APIs). Static information shown below.
-            </div>
-            <div class="status-grid">
-                <div class="status-card">
-                    <div class="status-header">
-                        <h3>Bot Information</h3>
-                        <div class="status-indicator status-online"></div>
-                    </div>
-                    <div class="status-info">
-                        <div class="status-row">
-                            <span class="status-label">Database</span>
-                            <span class="status-value">JSON Storage</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status-label">Caching</span>
-                            <span class="status-value">5 min TTL</span>
-                        </div>
-                    </div>
+            <div class="command-category">
+                <div class="category-title">🖥️ TXAdmin Server</div>
+                <div class="command-item">
+                    <div class="command-name">/link-tx</div>
+                    <div class="command-desc">Connect TXAdmin server (Admin only)</div>
                 </div>
-
-                <div class="status-card">
-                    <div class="status-header">
-                        <h3>TXAdmin</h3>
-                        <div class="status-indicator status-online"></div>
-                    </div>
-                    <div class="status-info">
-                        <div class="status-row">
-                            <span class="status-label">Server Control</span>
-                            <span class="status-value">✓ Supported</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status-label">Player Management</span>
-                            <span class="status-value">✓ Kick/Ban</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status-label">Status Monitor</span>
-                            <span class="status-value">✓ Real-time</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status-label">Platform</span>
-                            <span class="status-value">FiveM/GTA</span>
-                        </div>
-                    </div>
+                <div class="command-item">
+                    <div class="command-name">/tx-status</div>
+                    <div class="command-desc">Show server status and player count</div>
+                </div>
+                <div class="command-item">
+                    <div class="command-name">/tx-players</div>
+                    <div class="command-desc">List all active players on server</div>
+                </div>
+                <div class="command-item">
+                    <div class="command-name">/tx-manage</div>
+                    <div class="command-desc">Kick players or restart server (Admin)</div>
+                </div>
+                <div class="command-item">
+                    <div class="command-name">/unlink-tx</div>
+                    <div class="command-desc">Disconnect TXAdmin server (Admin)</div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+
+    <!-- STATUS PAGE -->
+    <div id="status" class="page">
+        <h1 class="section-title">Live Status</h1>
+        <div id="statusContainer" class="status-grid"></div>
+        <h2 class="section-title" style="margin-top: 4rem;">Connected Servers</h2>
+        <div id="serversContainer" class="status-grid"></div>
+    </div>
+
+    <!-- DOCUMENTATION PAGE -->
+    <div id="docs" class="page">
+        <h1 class="section-title">Documentation</h1>
+        <div class="docs-section">
+            <h2 style="color: #8b5cf6; font-size: 2rem; margin-bottom: 2rem;">📘 How to Use Ops Link</h2>
+            <div class="docs-content">
+                <h3>Getting Started</h3>
+                <p>Ops Link is a powerful Discord bot that tracks game statistics directly from source APIs. Here's how to get started:</p>
+                <ul>
+                    <li>Invite the bot to your Discord server</li>
+                    <li>Use <code>/link-game</code> to connect your gaming accounts</li>
+                    <li>Use <code>/stats</code> to view your statistics</li>
+                    <li>Statistics are cached for 5 minutes for optimal performance</li>
+                </ul>
+            </div>
+            <div class="docs-content">
+                <h3>Linking Gaming Accounts</h3>
+                <p>To link your gaming accounts, use the following commands:</p>
+                <ul>
+                    <li><strong>Roblox:</strong> Provide your Roblox username</li>
+                    <li><strong>Fortnite:</strong> Provide your Epic Games username</li>
+                    <li><strong>Call of Duty:</strong> Provide your Activision ID</li>
+                    <li><strong>PUBG:</strong> Provide your PUBG username and platform</li>
+                    <li><strong>Battlefield:</strong> Provide your Origin/EA username</li>
+                </ul>
+            </div>
+        </div>
+        <h2 style="color: #8b5cf6; font-size: 2rem; margin: 4rem 0 2rem;">🔧 Troubleshooting</h2>
+        <div class="docs-content">
+            <h3>Common Issues</h3>
+            <ul>
+                <li><strong>Stats not updating:</strong> Statistics are cached for 5 minutes. Wait and try again.</li>
+                <li><strong>Can't link account:</strong> Make sure your username is correct and your profile is public.</li>
+                <li><strong>Command not working:</strong> Ensure the bot has proper permissions in your server.</li>
+                <li><strong>Bot offline:</strong> Check the status page for real-time bot status.</li>
+            </ul>
+        </div>
+        <h2 style="color: #8b5cf6; font-size: 2rem; margin: 4rem 0 2rem;">👑 Server Owner Guide</h2>
+        <div class="docs-content">
+            <h3>Setting Up Ops Link</h3>
+            <p>As a server owner, you have additional features:</p>
+            <ul>
+                <li><strong>TXAdmin Integration:</strong> Use <code>/link-tx</code> to connect your FiveM server</li>
+                <li><strong>Permissions:</strong> Ensure the bot has "Read Messages", "Send Messages", and "Embed Links" permissions</li>
+                <li><strong>Role Setup:</strong> Create roles for managing who can use admin commands</li>
+                <li><strong>Server Management:</strong> Use TX commands to manage players and server status</li>
+            </ul>
+        </div>
+        <div class="docs-content">
+            <h3>TXAdmin Setup</h3>
+            <p>To connect your FiveM server:</p>
+            <ul>
+                <li>Get your TXAdmin API key from your server panel</li>
+                <li>Use <code>/link-tx</code> with your server IP and API key</li>
+                <li>Bot will confirm connection</li>
+                <li>Use <code>/tx-status</code> to check server status</li>
+                <li>Use <code>/tx-players</code> to see online players</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- TERMS/POLICY PAGE -->
+    <div id="terms" class="page">
+        <h1 class="section-title">Terms of Service & Privacy Policy</h1>
+        <div class="docs-section">
+            <div class="docs-content">
+                <h3>Agreement to Terms</h3>
+                <p>By using Ops Link, you agree to these terms and the terms of service of all connected platforms including:</p>
+                <ul>
+                    <li>Discord Terms of Service</li>
+                    <li>Roblox Terms of Service</li>
+                    <li>Epic Games (Fortnite) Terms of Service</li>
+                    <li>Activision (Call of Duty) Terms of Service</li>
+                    <li>PUBG Corporation Terms of Service</li>
+                    <li>Electronic Arts (Battlefield) Terms of Service</li>
+                </ul>
+                <p><strong>There are no ifs, ands, or buts about it</strong> - by using this bot, you acknowledge and agree to comply with all platform policies.</p>
+            </div>
+            <div class="docs-content">
+                <h3>Data Collection</h3>
+                <p>Ops Link collects and stores the following information:</p>
+                <ul>
+                    <li>Discord User IDs (for account linking)</li>
+                    <li>Gaming usernames you provide</li>
+                    <li>Server IDs where the bot is installed</li>
+                    <li>Command usage statistics</li>
+                    <li>Cached game statistics (stored for 5 minutes)</li>
+                </ul>
+                <p>We do NOT store passwords, API keys, or personal information beyond what's necessary for bot functionality.</p>
+            </div>
+            <div class="docs-content">
+                <h3>Data Usage</h3>
+                <p>Your data is used exclusively for:</p>
+                <ul>
+                    <li>Providing game statistics and bot functionality</li>
+                    <li>Improving bot performance and reliability</li>
+                    <li>Troubleshooting technical issues</li>
+                </ul>
+                <p>We will NEVER sell, share, or distribute your data to third parties.</p>
+            </div>
+            <div class="docs-content">
+                <h3>Platform Compliance</h3>
+                <p>By using Ops Link to access game statistics, you agree to comply with all terms of service for each gaming platform. This includes but is not limited to:</p>
+                <ul>
+                    <li>Not using the bot for cheating, hacking, or exploiting</li>
+                    <li>Not circumventing platform rate limits or restrictions</li>
+                    <li>Not violating any platform's community guidelines</li>
+                    <li>Accepting that the bot scrapes publicly available data only</li>
+                </ul>
+            </div>
+            <div class="docs-content">
+                <h3>Account Deletion</h3>
+                <p>You can request deletion of your data at any time by:</p>
+                <ul>
+                    <li>Using the <code>/unlink-game</code> command to remove linked accounts</li>
+                    <li>Contacting support through Discord</li>
+                    <li>Removing the bot from your server</li>
+                </ul>
+            </div>
+            <div class="docs-content">
+                <h3>Disclaimer</h3>
+                <p>Ops Link is provided "as is" without warranty. We are not responsible for:</p>
+                <ul>
+                    <li>Accuracy of third-party API data</li>
+                    <li>Downtime or service interruptions</li>
+                    <li>Actions taken by gaming platforms against your accounts</li>
+                    <li>Loss of data due to technical issues</li>
+                </ul>
+            </div>
+            <div class="docs-content">
+                <h3>Changes to Terms</h3>
+                <p>We reserve the right to modify these terms at any time. Continued use of the bot after changes constitutes acceptance of the new terms.</p>
+                <p style="margin-top: 1rem;"><strong>Last Updated:</strong> November 2025</p>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -844,170 +425,179 @@
     </footer>
 
     <script>
-        // Real game logo URLs
+        // ALL YOUR GAME LOGOS
         const gameLogos = [
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437711939689119785/Fortnite-Logo-PNG-Image-Transparent.png?ex=69143d15&is=6912eb95&hm=a2df0cdeb393f5acb269101a8589a1a1bb23088b66fdfd471042aeb7789c5766&', // Fortnite
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437710905025757225/d9gfn65-39ecb111-e20e-4d48-8b00-825d40f19698.png?ex=69143c1f&is=6912ea9f&hm=b6d31fd99ee6951d353d183c437ad8006c3168cbf756f8089fed3473f5cb687f&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437710938135597097/6c14d39dae6234039d207443c003cfea.jpg?ex=69143c27&is=6912eaa7&hm=1c78cef65c988c19215a9e073de4b3ee4e8a389622e25b58b996570d842cd95d&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437710999820963851/dif7d1l-d1d00769-f287-4f94-bbbf-21ac77e908a3.png?ex=69143c35&is=6912eab5&hm=796dd14571ade4039f1c15baf971f86589b4da6f7ba7ed0faf4f761c23f0cef3&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437711811179839529/Call_of_Duty_Black_Ops_7_Key_Art.png?ex=69143cf7&is=6912eb77&hm=08f0afb57b57d2809558cf228d17b8db82ecaf7cc3e0ea702b6e6723cff6d2bc&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437711835494219847/call-of-duty-black-ops-4-cover-image-2sp.png?ex=69143cfc&is=6912eb7c&hm=6c4cd5543cad679d47602ada0f48880a62b96d7649687dac2b0eaa94b2c6a478&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437712562660573315/call_of_duty___black_ops_cold_war___icon_by_shamo45_dg18rlo-fullview.png?ex=69143daa&is=6912ec2a&hm=adfee1c27fcf1d9fe38387117a9e552b746378bd1d7a4bc72ec4d900f8d91080&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437712593073602641/dghd6rn-fe21905b-381b-4298-aeea-59fc43dc3d33.png?ex=69143db1&is=6912ec31&hm=3ad067a0c092fef033e5905fe0dc65facdd9abccfa4e1259c862677e02ad8da5&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437712562660573315/call_of_duty___black_ops_cold_war___icon_by_shamo45_dg18rlo-fullview.png?ex=69143daa&is=6912ec2a&hm=adfee1c27fcf1d9fe38387117a9e552b746378bd1d7a4bc72ec4d900f8d91080&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437712593073602641/dghd6rn-fe21905b-381b-4298-aeea-59fc43dc3d33.png?ex=69143db1&is=6912ec31&hm=3ad067a0c092fef033e5905fe0dc65facdd9abccfa4e1259c862677e02ad8da5&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713369233883198/images_3-Photoroom.png?ex=69143e6a&is=6912ecea&hm=db11c0077f42b115e6bdfb0e768e68bbcb7390e5490bc38d9046dd29c1d6222e&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713369233883198/images_3-Photoroom.png?ex=69143e6a&is=6912ecea&hm=db11c0077f42b115e6bdfb0e768e68bbcb7390e5490bc38d9046dd29c1d6222e&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713394932252736/imgbin-call-of-duty-ghosts-call-of-duty-4-modern-warfare-call-of-duty-modern-warfare-2-call-of-duty-black-ops-ii-cod-auY4ta9Kvn5RWkXhEZyi8e2Fm-Photoroom.png?ex=69143e70&is=6912ecf0&hm=4345118817372bb9066ff70edd3bb619fafcf9ccb2c229d2165b1c313da867da&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713405346713750/images_1-Photoroom_1.png?ex=69143e73&is=6912ecf3&hm=8168eaea5a5a3f7dc3cea362f3294640f5de4ab84843f913550b9479771d0747&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713904880058528/48ee6f68eff851b5d3e15d8052389ecc-Photoroom.png?ex=69143eea&is=6912ed6a&hm=a250eeed1651bbc110fc7b70868a2caa35af565a2f6cac803999b8150f7d17c1&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713938014797926/call-of-duty-black-ops-2-zombies-icon-png-clipart-Photoroom.png?ex=69143ef2&is=6912ed72&hm=82d48f110cc774388f8c3393a9351866e41ca60592f7adee676878109b515604&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713958940311604/kisspng-call-of-duty-black-ops-ii-call-of-duty-zombies-c-black-ops-2-hack-download-5bac18e7531cf6.7253333715380052233404-Photoroom.png?ex=69143ef7&is=6912ed77&hm=5067d8e872bd63e810edfb9401b1de6ab94a168d762e0fb4e9c792b1660ef871&', // Call of Duty
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437715891847696446/images-Photoroom_8.png?ex=691440c4&is=6912ef44&hm=88df04a4590dc8712749f53140a8d627a22d7fd64d72f5645f1b37966dc813c2&', // PUBG
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437715907022684240/battlefield_PNG98.png?ex=691440c7&is=6912ef47&hm=03a5e76aea079c065ba00225dd261f1f204f4cb70e81d893c2adb32090124d38&', // Battlefield
-            'https://cdn.discordapp.com/attachments/1428592257581318255/1437715924517130311/images-Photoroom_7.png?ex=691440cb&is=6912ef4b&hm=6158f15036131ff0eba5e1dd25707d81db07b99ddf04034458f98d30f649a9d4&', // Roblox
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437711939689119785/Fortnite-Logo-PNG-Image-Transparent.png?ex=69143d15&is=6912eb95&hm=a2df0cdeb393f5acb269101a8589a1a1bb23088b66fdfd471042aeb7789c5766&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437710905025757225/d9gfn65-39ecb111-e20e-4d48-8b00-825d40f19698.png?ex=69143c1f&is=6912ea9f&hm=b6d31fd99ee6951d353d183c437ad8006c3168cbf756f8089fed3473f5cb687f&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437710938135597097/6c14d39dae6234039d207443c003cfea.jpg?ex=69143c27&is=6912eaa7&hm=1c78cef65c988c19215a9e073de4b3ee4e8a389622e25b58b996570d842cd95d&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437710999820963851/dif7d1l-d1d00769-f287-4f94-bbbf-21ac77e908a3.png?ex=69143c35&is=6912eab5&hm=796dd14571ade4039f1c15baf971f86589b4da6f7ba7ed0faf4f761c23f0cef3&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437711811179839529/Call_of_Duty_Black_Ops_7_Key_Art.png?ex=691440c4&is=6912ef44&hm=88df04a4590dc8712749f53140a8d627a22d7fd64d72f5645f1b37966dc813c2&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437711835494219847/call-of-duty-black-ops-4-cover-image-2sp.png?ex=69143cfc&is=6912eb7c&hm=6c4cd5543cad679d47602ada0f48880a62b96d7649687dac2b0eaa94b2c6a478&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437712562660573315/call_of_duty___black_ops_cold_war___icon_by_shamo45_dg18rlo-fullview.png?ex=69143daa&is=6912ec2a&hm=adfee1c27fcf1d9fe38387117a9e552b746378bd1d7a4bc72ec4d900f8d91080&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437712593073602641/dghd6rn-fe21905b-381b-4298-aeea-59fc43dc3d33.png?ex=69143db1&is=6912ec31&hm=3ad067a0c092fef033e5905fe0dc65facdd9abccfa4e1259c862677e02ad8da5&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713369233883198/images_3-Photoroom.png?ex=69143e6a&is=6912ecea&hm=db11c0077f42b115e6bdfb0e768e68bbcb7390e5490bc38d9046dd29c1d6222e&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713394932252736/imgbin-call-of-duty-ghosts-call-of-duty-4-modern-warfare-call-of-duty-modern-warfare-2-call-of-duty-black-ops-ii-cod-auY4ta9Kvn5RWkXhEZyi8e2Fm-Photoroom.png?ex=69143e70&is=6912ecf0&hm=4345118817372bb9066ff70edd3bb619fafcf9ccb2c229d2165b1c313da867da&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713405346713750/images_1-Photoroom_1.png?ex=69143e73&is=6912ecf3&hm=8168eaea5a5a3f7dc3cea362f3294640f5de4ab84843f913550b9479771d0747&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713904880058528/48ee6f68eff851b5d3e15d8052389ecc-Photoroom.png?ex=69143eea&is=6912ed6a&hm=a250eeed1651bbc110fc7b70868a2caa35af565a2f6cac803999b8150f7d17c1&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713938014797926/call-of-duty-black-ops-2-zombies-icon-png-clipart-Photoroom.png?ex=69143ef2&is=6912ed72&hm=82d48f110cc774388f8c3393a9351866e41ca60592f7adee676878109b515604&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437713958940311604/kisspng-call-of-duty-black-ops-ii-call-of-duty-zombies-c-black-ops-2-hack-download-5bac18e7531cf6.7253333715380052233404-Photoroom.png?ex=69143ef7&is=6912ed77&hm=5067d8e872bd63e810edfb9401b1de6ab94a168d762e0fb4e9c792b1660ef871&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437715891847696446/images-Photoroom_8.png?ex=691440c4&is=6912ef44&hm=88df04a4590dc8712749f53140a8d627a22d7fd64d72f5645f1b37966dc813c2&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437715907022684240/battlefield_PNG98.png?ex=691440c7&is=6912ef47&hm=03a5e76aea079c065ba00225dd261f1f204f4cb70e81d893c2adb32090124d38&',
+            'https://cdn.discordapp.com/attachments/1428592257581318255/1437715924517130311/images-Photoroom_7.png?ex=691440cb&is=6912ef4b&hm=6158f15036131ff0eba5e1dd25707d81db07b99ddf04034458f98d30f649a9d4&'
         ];
 
-        // Create falling game logos animation
+        // Create falling logos
         function createFallingLogo() {
-            const bgAnimation = document.getElementById('bgAnimation');
-            const logoContainer = document.createElement('div');
-            logoContainer.className = 'falling-logo';
-            
+            const bg = document.getElementById('bgAnimation');
+            const logo = document.createElement('div');
+            logo.className = 'falling-logo';
             const img = document.createElement('img');
             img.src = gameLogos[Math.floor(Math.random() * gameLogos.length)];
             img.alt = 'Game Logo';
-            
-            logoContainer.appendChild(img);
-            logoContainer.style.left = Math.random() * 100 + '%';
-            logoContainer.style.animationDuration = (Math.random() * 10 + 15) + 's';
-            logoContainer.style.animationDelay = Math.random() * 5 + 's';
-            
-            bgAnimation.appendChild(logoContainer);
-            
-            setTimeout(() => logoContainer.remove(), 25000);
+            logo.appendChild(img);
+            logo.style.left = Math.random() * 100 + '%';
+            logo.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            logo.style.animationDelay = Math.random() * 5 + 's';
+            bg.appendChild(logo);
+            setTimeout(() => logo.remove(), 25000);
         }
 
-        // Create falling logos
         setInterval(createFallingLogo, 1000);
-        for(let i = 0; i < 12; i++) {
-            setTimeout(createFallingLogo, i * 800);
+        for (let i = 0; i < 12; i++) setTimeout(createFallingLogo, i * 800);
+
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+            window.scrollTo(0, 0);
+            if (pageId === 'status') loadStatus();
         }
 
-        // Active nav link highlighting
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.nav-links a');
-
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (scrollY >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').substring(1) === current) {
-                    link.classList.add('active');
-                }
-            });
-        });
-
-        // Try to fetch bot status (will likely fail due to Mixed Content)
-        async function tryFetchBotStatus() {
+        // Fetch bot stats
+        async function fetchStats() {
             try {
-                const response = await fetch('http://193.31.31.121:25908/api/health');
-                const data = await response.json();
-                
-                // If successful, update stats
-                if (data.uptime) {
-                    const hours = Math.floor(data.uptime / 3600);
-                    const minutes = Math.floor((data.uptime % 3600) / 60);
-                    const uptimeText = hours > 0 ? `${hours}h` : `${minutes}m`;
-                    document.getElementById('uptime').textContent = uptimeText;
-                }
-            } catch (error) {
-                // Expected to fail due to Mixed Content policy
-                console.log('Cannot fetch bot API from HTTPS site (Mixed Content policy)');
-            }
-
-            try {
-                const response = await fetch('http://193.31.31.121:25908/api/gamelinks');
-                const data = await response.json();
-                const linkCount = Object.keys(data.data || {}).length;
+                const [healthRes, gamelinksRes] = await Promise.all([
+                    fetch('http://opslink.online:25908/api/health'),
+                    fetch('http://opslink.online:25908/api/gamelinks')
+                ]);
+                const health = await healthRes.json();
+                const links = await gamelinksRes.json();
+                const linkCount = Object.keys(links.data || {}).length;
                 document.getElementById('totalLinks').textContent = linkCount;
-            } catch (error) {
-                console.log('Cannot fetch gamelinks from API');
+                const hours = Math.floor(health.uptime / 3600);
+                const mins = Math.floor((health.uptime % 3600) / 60);
+                document.getElementById('uptime').textContent = hours > 0 ? `${hours}h` : `${mins}m`;
+            } catch (e) {
+                console.error('Fetch failed:', e);
             }
         }
 
-        // Try once on load
-        tryFetchBotStatus();
+        // Load status page
+        async function loadStatus() {
+            const statusContainer = document.getElementById('statusContainer');
+            const serversContainer = document.getElementById('serversContainer');
+            
+            try {
+                const [healthRes, gamelinksRes] = await Promise.all([
+                    fetch('http://opslink.online:25908/api/health'),
+                    fetch('http://opslink.online:25908/api/gamelinks')
+                ]);
+                const health = await healthRes.json();
+                const links = await gamelinksRes.json();
+                const linkCount = Object.keys(links.data || {}).length;
+                const hours = Math.floor(health.uptime / 3600);
+                const mins = Math.floor((health.uptime % 3600) / 60);
+                const uptime = hours > 0 ? `${hours}h` : `${mins}m`;
+                const isOnline = health.status === 'ok';
+
+                statusContainer.innerHTML = `
+                    <div class="status-card">
+                        <div class="status-header">
+                            <h3>Bot Status</h3>
+                            <div class="status-indicator ${isOnline ? 'status-online' : 'status-offline'}"></div>
+                        </div>
+                        <div class="status-info">
+                            <div class="status-row"><span class="status-label">Name</span><span class="status-value">${health.bot || 'Ops Link Bot'}</span></div>
+                            <div class="status-row"><span class="status-label">Version</span><span class="status-value">2.0.0</span></div>
+                            <div class="status-row"><span class="status-label">Uptime</span><span class="status-value">${uptime}</span></div>
+                            <div class="status-row"><span class="status-label">Ping</span><span class="status-value">${health.ping}ms</span></div>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-header">
+                            <h3>API Status</h3>
+                            <div class="status-indicator status-online"></div>
+                        </div>
+                        <div class="status-info">
+                            <div class="status-row"><span class="status-label">REST API</span><span class="status-value">✓ Online</span></div>
+                            <div class="status-row"><span class="status-label">Framework</span><span class="status-value">Express.js</span></div>
+                            <div class="status-row"><span class="status-label">CORS</span><span class="status-value">✓ Enabled</span></div>
+                            <div class="status-row"><span class="status-label">Linked Accounts</span><span class="status-value">${linkCount}</span></div>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-header">
+                            <h3>Game Scrapers</h3>
+                            <div class="status-indicator status-online"></div>
+                        </div>
+                        <div class="status-info">
+                            <div class="status-row"><span class="status-label">🎮 Roblox</span><span class="status-value">✓ Active</span></div>
+                            <div class="status-row"><span class="status-label">🔫 Fortnite</span><span class="status-value">✓ Active</span></div>
+                            <div class="status-row"><span class="status-label">💥 Call of Duty</span><span class="status-value">✓ Active</span></div>
+                            <div class="status-row"><span class="status-label">🪂 PUBG</span><span class="status-value">✓ Active</span></div>
+                            <div class="status-row"><span class="status-label">⚔️ Battlefield</span><span class="status-value">✓ Active</span></div>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-header">
+                            <h3>Database</h3>
+                            <div class="status-indicator status-online"></div>
+                        </div>
+                        <div class="status-info">
+                            <div class="status-row"><span class="status-label">Type</span><span class="status-value">JSON Storage</span></div>
+                            <div class="status-row"><span class="status-label">Collections</span><span class="status-value">3</span></div>
+                            <div class="status-row"><span class="status-label">Cache TTL</span><span class="status-value">5 minutes</span></div>
+                            <div class="status-row"><span class="status-label">Status</span><span class="status-value">✓ Active</span></div>
+                        </div>
+                    </div>
+                `;
+
+                serversContainer.innerHTML = `
+                    <div class="status-card">
+                        <div class="status-header">
+                            <h3>Servers Connected</h3>
+                            <div class="status-indicator status-online"></div>
+                        </div>
+                        <div class="status-info">
+                            <div class="status-row"><span class="status-label">Total Servers</span><span class="status-value">${health.guilds || 0}</span></div>
+                            <div class="status-row"><span class="status-label">Total Users</span><span class="status-value">${health.users || 0}</span></div>
+                            <div class="status-row"><span class="status-label">Active Commands</span><span class="status-value">15+</span></div>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-header">
+                            <h3>TXAdmin Servers</h3>
+                            <div class="status-indicator status-online"></div>
+                        </div>
+                        <div class="status-info">
+                            <div class="status-row"><span class="status-label">Connected</span><span class="status-value">Available</span></div>
+                            <div class="status-row"><span class="status-label">Platform</span><span class="status-value">FiveM/GTA</span></div>
+                            <div class="status-row"><span class="status-label">Features</span><span class="status-value">✓ Enabled</span></div>
+                        </div>
+                    </div>
+                `;
+            } catch (e) {
+                console.error('Status load failed:', e);
+                statusContainer.innerHTML = '<p style="color: #94a3b8; text-align: center; grid-column: 1/-1;">Unable to load live status. Please check back later.</p>';
+                serversContainer.innerHTML = '<p style="color: #94a3b8; text-align: center; grid-column: 1/-1;">Server information unavailable.</p>';
+            }
+        }
+
+        // Initial load
+        fetchStats();
+        setInterval(fetchStats, 30000);
     </script>
 </body>
-</html>-label">Name</span>
-                            <span class="status-value">Ops Link Bot</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status-label">Version</span>
-                            <span class="status-value">2.0.0</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status-label">Framework</span>
-                            <span class="status-value">Discord.js 14</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status-label">Platform</span>
-                            <span class="status-value">Node.js + Express</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="status-card">
-                    <div class="status-header">
-                        <h3>Supported Games</h3>
-                        <div class="status-indicator status-online"></div>
-                    </div>
-                    <div class="status-info">
-                        <div class="status-row">
-                            <span class="status-label">🎮 Roblox</span>
-                            <span class="status-value">Stats & Badges</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status-label">🔫 Fortnite</span>
-                            <span class="status-value">K/D & Wins</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status-label">💥 Call of Duty</span>
-                            <span class="status-value">Warzone Stats</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status-label">🪂 PUBG</span>
-                            <span class="status-value">Battlegrounds</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status-label">⚔️ Battlefield</span>
-                            <span class="status-value">Player Stats</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="status-card">
-                    <div class="status-header">
-                        <h3>API Features</h3>
-                        <div class="status-indicator status-online"></div>
-                    </div>
-                    <div class="status-info">
-                        <div class="status-row">
-                            <span class="status-label">REST API</span>
-                            <span class="status-value">✓ Available</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status-label">CORS</span>
-                            <span class="status-value">✓ Enabled</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="status
+</html>
