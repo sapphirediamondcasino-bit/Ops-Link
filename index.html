@@ -425,6 +425,9 @@
     </footer>
 
     <script>
+        // API Configuration - Uses SparkHost Reverse Proxy
+        const API_URL = 'https://opslink.online';
+
         // ALL YOUR GAME LOGOS
         const gameLogos = [
             'https://cdn.discordapp.com/attachments/1428592257581318255/1437711939689119785/Fortnite-Logo-PNG-Image-Transparent.png?ex=69143d15&is=6912eb95&hm=a2df0cdeb393f5acb269101a8589a1a1bb23088b66fdfd471042aeb7789c5766&',
@@ -446,7 +449,7 @@
             'https://cdn.discordapp.com/attachments/1428592257581318255/1437715924517130311/images-Photoroom_7.png?ex=691440cb&is=6912ef4b&hm=6158f15036131ff0eba5e1dd25707d81db07b99ddf04034458f98d30f649a9d4&'
         ];
 
-        // Create falling logos
+        // Create falling logos animation
         function createFallingLogo() {
             const bg = document.getElementById('bgAnimation');
             const logo = document.createElement('div');
@@ -475,41 +478,60 @@
             if (pageId === 'status') loadStatus();
         }
 
-        // Fetch bot stats
+        // Fetch bot stats from API through SparkHost proxy
         async function fetchStats() {
             try {
                 const [healthRes, gamelinksRes] = await Promise.all([
-                    fetch('http://opslink.online:25908/api/health'),
-                    fetch('http://opslink.online:25908/api/gamelinks')
+                    fetch(`${API_URL}/api/health`),
+                    fetch(`${API_URL}/api/gamelinks`)
                 ]);
+                
+                if (!healthRes.ok || !gamelinksRes.ok) {
+                    throw new Error('API request failed');
+                }
+                
                 const health = await healthRes.json();
                 const links = await gamelinksRes.json();
                 const linkCount = Object.keys(links.data || {}).length;
+                
                 document.getElementById('totalLinks').textContent = linkCount;
+                
                 const hours = Math.floor(health.uptime / 3600);
                 const mins = Math.floor((health.uptime % 3600) / 60);
                 document.getElementById('uptime').textContent = hours > 0 ? `${hours}h` : `${mins}m`;
+                
+                console.log('✅ Stats fetched successfully through proxy');
             } catch (e) {
-                console.error('Fetch failed:', e);
+                console.error('❌ Fetch failed:', e);
+                document.getElementById('totalLinks').textContent = '0';
+                document.getElementById('uptime').textContent = '0m';
             }
         }
 
-        // Load status page
+        // Load status page with live data
         async function loadStatus() {
             const statusContainer = document.getElementById('statusContainer');
             const serversContainer = document.getElementById('serversContainer');
             
+            statusContainer.innerHTML = '<p style="color: #94a3b8; text-align: center; grid-column: 1/-1;">Loading status...</p>';
+            serversContainer.innerHTML = '<p style="color: #94a3b8; text-align: center; grid-column: 1/-1;">Loading server info...</p>';
+            
             try {
                 const [healthRes, gamelinksRes] = await Promise.all([
-                    fetch('http://opslink.online:25908/api/health'),
-                    fetch('http://opslink.online:25908/api/gamelinks')
+                    fetch(`${API_URL}/api/health`),
+                    fetch(`${API_URL}/api/gamelinks`)
                 ]);
+                
+                if (!healthRes.ok || !gamelinksRes.ok) {
+                    throw new Error('API request failed');
+                }
+                
                 const health = await healthRes.json();
                 const links = await gamelinksRes.json();
                 const linkCount = Object.keys(links.data || {}).length;
                 const hours = Math.floor(health.uptime / 3600);
                 const mins = Math.floor((health.uptime % 3600) / 60);
-                const uptime = hours > 0 ? `${hours}h` : `${mins}m`;
+                const uptime = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
                 const isOnline = health.status === 'ok';
 
                 statusContainer.innerHTML = `
@@ -588,16 +610,18 @@
                         </div>
                     </div>
                 `;
+                
+                console.log('✅ Status page loaded successfully through proxy');
             } catch (e) {
-                console.error('Status load failed:', e);
-                statusContainer.innerHTML = '<p style="color: #94a3b8; text-align: center; grid-column: 1/-1;">Unable to load live status. Please check back later.</p>';
+                console.error('❌ Status load failed:', e);
+                statusContainer.innerHTML = '<p style="color: #94a3b8; text-align: center; grid-column: 1/-1;">⚠️ Unable to load live status. API may be offline or proxy not configured.</p>';
                 serversContainer.innerHTML = '<p style="color: #94a3b8; text-align: center; grid-column: 1/-1;">Server information unavailable.</p>';
             }
         }
 
         // Initial load
         fetchStats();
-        setInterval(fetchStats, 30000);
+        setInterval(fetchStats, 30000); // Auto-refresh every 30 seconds
     </script>
 </body>
 </html>
